@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-state-devopsthehardway"
+    bucket = "terraform-state-devopsthehardway-yaya"
     key    = "eks-terraform-workernodes.tfstate"
     region = "us-east-1"
   }
@@ -58,6 +58,7 @@ resource "aws_eks_cluster" "devopsthehardway-eks" {
     aws_iam_role.eks-iam-role,
   ]
 }
+
 
 ## Worker Nodes
 resource "aws_iam_role" "workernodes" {

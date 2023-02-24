@@ -1,33 +1,33 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: uber-ui
+  name: yaya
 spec:
   selector:
-    app: uber-ui
+    app: yaya
   ports:
   - protocol: "TCP"
     port: 6000
-    targetPort: 5000
+    targetPort: 4000
   type: LoadBalancer
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uber-ui
+  name: yaya
 spec:
   selector:
     matchLabels:
-      app: uber-ui
+      app: yaya
   replicas: 2
   template:
     metadata:
       labels:
-        app: uber-ui
+        app: yaya
     spec:
       containers:
-      - name: uber-ui
+      - name: yaya
         image: 597647611698.dkr.ecr.us-east-1.amazonaws.com/devopsthehardway-ecr:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 4000

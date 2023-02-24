@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-state-devopsthehardway"
+    bucket = "terraform-state-devopsthehardway-yaya"
     key    = "eks-terraform.tfstate"
     region = "us-east-1"
   }
@@ -13,8 +13,8 @@ terraform {
 
 
 # IAM Role for EKS to have access to the appropriate resources
-resource "aws_iam_role" "eks-iam-role" {
-  name = "devopsthehardway-eks-iam-role"
+resource "aws_iam_role" "eks-iam-role-fargate" {
+  name = "devopsthehardway-eks-iam-role-fargate"
 
   path = "/"
 
@@ -38,20 +38,20 @@ EOF
 ## Attach the IAM policy to the IAM role
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks-iam-role.name
+  role       = aws_iam_role.eks-iam-role-fargate.name
 }
 
 ## Create the EKS cluster
-resource "aws_eks_cluster" "devopsthehardway-eks" {
-  name = "devopsthehardway-cluster"
-  role_arn = aws_iam_role.eks-iam-role.arn
+resource "aws_eks_cluster" "devopsthehardway-eks-fargate" {
+  name = "devopsthehardway-cluster-fargate"
+  role_arn = aws_iam_role.eks-iam-role-fargate.arn
 
   vpc_config {
     subnet_ids = [var.subnet_id_1, var.subnet_id_2]
   }
 
   depends_on = [
-    aws_iam_role.eks-iam-role,
+    aws_iam_role.eks-iam-role-fargate,
   ]
 }
 
@@ -82,7 +82,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy-fargate" {
 }
 
 resource "aws_eks_fargate_profile" "devopsthehardway-eks-serverless" {
-  cluster_name           = aws_eks_cluster.devopsthehardway-eks.name
+  cluster_name           = aws_eks_cluster.devopsthehardway-eks-fargate.name
   fargate_profile_name   = "devopsthehardway-serverless-eks"
   pod_execution_role_arn = aws_iam_role.eks-fargate.arn
   subnet_ids             = [var.private_subnet_id_1]
