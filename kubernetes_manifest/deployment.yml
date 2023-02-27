@@ -20,7 +20,7 @@ spec:
   selector:
     matchLabels:
       app: uber-ui
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
       - name: uber-ui
-        image: 597647611698.dkr.ecr.us-east-1.amazonaws.com/devopsthehardway-ecr:latest
+        image: public.ecr.aws/v6n8a7u8/devopsthehardway-ecr:latest
         ports:
         - containerPort: 5000
